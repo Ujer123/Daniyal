@@ -6,14 +6,15 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import Loading from "@/components/Loading";
 import { useAppContext } from "@/context/AppContext";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '@/lib/features/cart/cartSlice';
+import { useRouter } from "next/navigation";
 
 const Product = () => {
 
     const { id } = useParams();
-
-    const { products, router } = useAppContext()
+    const products = useSelector((state)=> state.products)
+    const router = useRouter()
 
     const [mainImage, setMainImage] = useState(null);
     const [productData, setProductData] = useState(null);

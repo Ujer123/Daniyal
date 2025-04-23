@@ -5,11 +5,20 @@ import { useAppContext } from "@/context/AppContext";
 import Image from "next/image";
 import { FaCartFlatbed } from "react-icons/fa6";
 import { useClerk, UserButton } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
 
 const Navbar = () => {
+  const router = useRouter()
+  const dispatch = useDispatch()
+  const cartItems = useSelector((state)=> state.cart)
 
-  const { isSeller, router, getTotalCartItems, user } = useAppContext();
+
+  const { isSeller, user } = useAppContext();
   const {openSignIn} = useClerk()
+
+  const getTotalCartItems =()=> Object.values(cartItems).length
+
 
   return (
     <nav className="flex items-center justify-between px-6 md:px-16 lg:px-32 py-3 border-b border-gray-300 text-gray-700">

@@ -4,10 +4,18 @@ import { assets } from "@/assets/assets";
 import OrderSummary from "@/components/OrderSummary";
 import Image from "next/image";
 import { useAppContext } from "@/context/AppContext";
+import { useSelector, useDispatch } from "react-redux";
+import { addToCart, updateCartQty, clearCart } from "@/lib/features/cart/cartSlice";
+import { useRouter } from "next/navigation";
 
 const Cart = () => {
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state)=> state.cart)
+  const products = useSelector((state)=> state.products)
+  const router = useRouter();
+  
 
-  const { products, router, cartItems, addToCart, updateCartQuantity, getCartCount } = useAppContext();
+  const getCartCount =()=> Object.values(cartItems).reduce((acc, qty)=> acc + qty, 0)
 
   return (
     <>
@@ -58,7 +66,7 @@ const Cart = () => {
                           </div>
                           <button
                             className="md:hidden text-xs text-orange-600 mt-1"
-                            onClick={() => updateCartQuantity(product._id, 0)}
+                            onClick={() => dispatch(updateCartQty({itemId: product._id,quantity: 0}))}
                           >
                             Remove
                           </button>
@@ -67,7 +75,7 @@ const Cart = () => {
                           <p className="text-gray-800">{product.name}</p>
                           <button
                             className="text-xs text-orange-600 mt-1"
-                            onClick={() => updateCartQuantity(product._id, 0)}
+                            onClick={() => dispatch(updateCartQty({itemId: product._id,quantity: 0}))}
                           >
                             Remove
                           </button>
@@ -76,15 +84,15 @@ const Cart = () => {
                       <td className="py-4 md:px-4 px-1 text-gray-600">${product.offerPrice}</td>
                       <td className="py-4 md:px-4 px-1">
                         <div className="flex items-center md:gap-2 gap-1">
-                          <button onClick={() => updateCartQuantity(product._id, cartItems[itemId] - 1)}>
+                          <button onClick={() => dispatch(updateCartQty({itemId: product._id,quantity: cartItems[itemId] - 1}))}>
                             <Image
                               src={assets.decrease_arrow}
                               alt="decrease_arrow"
                               className="w-4 h-4"
                             />
                           </button>
-                          <input onChange={e => updateCartQuantity(product._id, Number(e.target.value))} type="number" value={cartItems[itemId]} className="w-8 border text-center appearance-none"></input>
-                          <button onClick={() => addToCart(product._id)}>
+                          <input onChange={e => dispatch(updateCartQty(product._id, Number(e.target.value)))} type="number" value={cartItems[itemId]} className="w-8 border text-center appearance-none"></input>
+                          <button onClick={() => dispatch(addToCart(product._id))}>
                             <Image
                               src={assets.increase_arrow}
                               alt="increase_arrow"
