@@ -2,8 +2,9 @@
 import { productsDummyData, userDummyData } from "@/assets/assets";
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
-import axios from "axios";
-import { useUser } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
+import toast from "react-hot-toast";
+
 
 export const AppContext = createContext();
 
@@ -14,22 +15,36 @@ export const useAppContext = () => {
 export const AppContextProvider = (props) => {
 
     const currency = process.env.NEXT_PUBLIC_CURRENCY
-    const backendUrl = process.env.NEXT_PUBLIC_URI
     const router = useRouter()
-
+    const {getToken} = useAuth()
+    const {user} = useUser()
     const [products, setProducts] = useState([])
     const [userData, setUserData] = useState(false)
     const [isSeller, setIsSeller] = useState(true)
     const [cartItems, setCartItems] = useState({})
 
     const fetchProductData = async () => {
-        setProducts(productsDummyData)
+        try {
+            if(user.publicMetadata.role === 'seller'){
+                setIsSeller(true)
+            }
+            setProducts(productsDummyData)
+            const token = await getToken()
+            const  {data} = await axios.get('/api/user/data', {headers: {Authorization: `Bearer ${token}`}})
+            if(data.success){
+                setUserData(data.user)
+                setCartItems(data.user.cartItems)
+            }else{
+                toast.error(data.message)
+            }
+        } catch (error) {
+            toast.error(error.message)            
+        }
     }
 
     const fetchUserData = async () => {
         setUserData(userDummyData)
     }
-    const {user} = useUser()
 
     const addToCart = async (itemId) => {
 
@@ -59,16 +74,6 @@ export const AppContextProvider = (props) => {
         return Object.keys(cartItems).length;
     }
 
-    const getCartCount = () => {
-        let totalCount = 0;
-        for (const items in cartItems) {
-            if (cartItems[items] > 0) {
-                totalCount += cartItems[items];
-            }
-        }
-        return totalCount;
-    }
-
     const getCartAmount = () => {
         let totalAmount = 0;
         for (const items in cartItems) {
@@ -95,8 +100,9 @@ export const AppContextProvider = (props) => {
         products, fetchProductData,
         cartItems, setCartItems,
         addToCart, updateCartQuantity,
-        getCartCount, getCartAmount,
-        getTotalCartItems, user
+        getCartAmount,
+        getTotalCartItems, user,
+        getToken
     }
 
     return (

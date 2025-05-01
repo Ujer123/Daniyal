@@ -39,8 +39,8 @@ const Footer = () => {
           <div>
             <h2 className="font-medium text-gray-900 mb-5">Get in touch</h2>
             <div className="text-sm space-y-2">
-              <p>+1-234-567-890</p>
-              <p>contact@greatstack.dev</p>
+            <a href="tel:+919136767042">+91 9136767042</a><br />
+            <a href="mailto:ujermohd0@gmail.com">ujermohd0@gmail.com</a>
             </div>
           </div>
         </div>

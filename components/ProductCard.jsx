@@ -8,7 +8,7 @@ import { useAppContext } from '@/context/AppContext';
 const ProductCard = ({ product }) => {
     
 
-    const { currency, router, getCartCount } = useAppContext()
+    const { currency, router} = useAppContext()
 
     return (
         <div

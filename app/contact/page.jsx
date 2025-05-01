@@ -12,7 +12,7 @@ const ContactInfo = () => (
         </p>
         <ul className="mt-16 space-y-8">
             <ContactDetail icon={<CiMail />} text="rccreation.team@yahoo.com" />
-            <ContactDetail icon={<FaPhoneAlt />} text="+91 9266-116358, +91 11-4227-3742" />
+            <ContactDetail icon={<FaPhoneAlt />} text="+91 9136767042" />
             <ContactDetail icon={<FaLocationDot />} text="Dongri-400003, Mumbai, INDIA" />
         </ul>
         <SocialLinks />

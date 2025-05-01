@@ -5,19 +5,26 @@ import { useAppContext } from "@/context/AppContext";
 import Image from "next/image";
 import { FaCartFlatbed } from "react-icons/fa6";
 import { useClerk, UserButton } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
+import { setIsSeller } from "@/lib/features/user/userSlice";
 
 const Navbar = () => {
-  const router = useRouter()
   const dispatch = useDispatch()
   const cartItems = useSelector((state)=> state.cart)
-
-
-  const { isSeller, user } = useAppContext();
+  const isSeller = useSelector((state)=> state.user.isSeller)
   const {openSignIn} = useClerk()
+  const authUser = useSelector((state)=> state.user.authUser)
+  
+
+
+  const { user, router } = useAppContext();
 
   const getTotalCartItems =()=> Object.values(cartItems).length
+
+  const handleSellerDashboard = () => {
+    dispatch(setIsSeller(true))
+    router.push('/seller')
+  }
 
 
   return (
@@ -42,7 +49,7 @@ const Navbar = () => {
           Contact
         </Link>
 
-        {isSeller && <button onClick={() => router.push('/seller')} className="text-xs border px-4 py-1.5 rounded-full">Seller Dashboard</button>}
+        {authUser && <button onClick={handleSellerDashboard} className="text-xs border px-4 py-1.5 rounded-full">Seller Dashboard</button>}
 
       </div>
 

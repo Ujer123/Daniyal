@@ -5,17 +5,18 @@ import OrderSummary from "@/components/OrderSummary";
 import Image from "next/image";
 import { useAppContext } from "@/context/AppContext";
 import { useSelector, useDispatch } from "react-redux";
-import { addToCart, updateCartQty, clearCart } from "@/lib/features/cart/cartSlice";
-import { useRouter } from "next/navigation";
+import { addToCart, updateCartQty } from "@/lib/features/cart/cartSlice";
+import { selectCartCount } from "@/lib/features/cart/cartSelectors";
+
 
 const Cart = () => {
   const dispatch = useDispatch();
   const cartItems = useSelector((state)=> state.cart)
   const products = useSelector((state)=> state.products)
-  const router = useRouter();
+  const cartCount = useSelector(selectCartCount);  
+  const {router } = useAppContext()
   
 
-  const getCartCount =()=> Object.values(cartItems).reduce((acc, qty)=> acc + qty, 0)
 
   return (
     <>
@@ -25,7 +26,7 @@ const Cart = () => {
             <p className="text-2xl md:text-3xl text-gray-500">
               Your <span className="font-medium text-orange-600">Cart</span>
             </p>
-            <p className="text-lg md:text-xl text-gray-500/80">{getCartCount()} Items</p>
+            <p className="text-lg md:text-xl text-gray-500/80">{cartCount} Items</p>
           </div>
           <div className="overflow-x-auto">
             <table className="min-w-full table-auto">
@@ -56,13 +57,13 @@ const Cart = () => {
                       <td className="flex items-center gap-4 py-4 md:px-4 px-1">
                         <div>
                           <div className="rounded-lg overflow-hidden bg-gray-500/10 p-2">
-                            {/* <Image
+                            <Image
                               src={product.image[0]}
                               alt={product.name}
                               className="w-16 h-auto object-cover mix-blend-multiply"
                               width={1280}
                               height={720}
-                            /> */}
+                            />
                           </div>
                           <button
                             className="md:hidden text-xs text-orange-600 mt-1"
