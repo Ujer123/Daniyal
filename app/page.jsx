@@ -1,8 +1,11 @@
 import HeaderSlider from "@/components/HeaderSlider";
-import HomeProducts from "@/components/HomeProducts";
-import Banner from "@/components/Banner";
-import NewsLetter from "@/components/NewsLetter";
-import FeaturedProduct from "@/components/FeaturedProduct";
+import HomeProducts from "@/components/Home/HomeProducts";
+import Banner from "@/components/Home/Banner";
+import NewsLetter from "@/components/Home/NewsLetter";
+import FeaturedProduct from "@/components/Home/FeaturedProduct";
+import AboutUs from "@/components/About/AboutUs";
+import Services from "@/components/About/Services";
+import { TestimonialCard } from "@/components/About/TestimonialCard";
 
 
 const Home = () => {
@@ -11,9 +14,12 @@ const Home = () => {
       <div className="px-6 md:px-16 lg:px-32">
         <HeaderSlider />
         <HomeProducts/>
-        <FeaturedProduct />
+        <AboutUs/>
+        <Services/>
+        {/* <FeaturedProduct /> */}
         <Banner />
-        <NewsLetter />
+        <TestimonialCard/>
+        {/* <NewsLetter /> */}
       </div>
     </>
   );

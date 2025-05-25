@@ -15,8 +15,6 @@ const Cart = () => {
   const products = useSelector((state)=> state.products)
   const cartCount = useSelector(selectCartCount);  
   const {router } = useAppContext()
-  
-
 
   return (
     <>

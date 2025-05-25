@@ -1,5 +1,5 @@
 import { render, fireEvent } from '@testing-library/react';
-import FeaturedProduct from '../FeaturedProduct';
+import FeaturedProduct from '../Home/FeaturedProduct';
 const mockPush = jest.fn();
 
 jest.mock('next/image', () => ({

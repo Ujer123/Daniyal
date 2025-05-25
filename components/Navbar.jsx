@@ -4,27 +4,30 @@ import Link from "next/link"
 import { useAppContext } from "@/context/AppContext";
 import Image from "next/image";
 import { FaCartFlatbed } from "react-icons/fa6";
-import { useClerk, UserButton } from "@clerk/nextjs";
+import { useClerk, UserButton, useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { setIsSeller } from "@/lib/features/user/userSlice";
+import { useEffect } from "react";
+import { fetchProductData } from "@/lib/features/user/userSlice";
 
 const Navbar = () => {
+  const router = useRouter()
   const dispatch = useDispatch()
   const cartItems = useSelector((state)=> state.cart)
-  const isSeller = useSelector((state)=> state.user.isSeller)
+  const {user}  = useUser();
+  const { isSeller, userData, loading, error } = useSelector((state) => state.user);
+
+
+  // const { isSeller } = useAppContext();
   const {openSignIn} = useClerk()
-  const authUser = useSelector((state)=> state.user.authUser)
-  
-
-
-  const { user, router } = useAppContext();
 
   const getTotalCartItems =()=> Object.values(cartItems).length
 
-  const handleSellerDashboard = () => {
-    dispatch(setIsSeller(true))
-    router.push('/seller')
-  }
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchProductData(user));
+    }
+  }, [dispatch, user]);
 
 
   return (
@@ -49,7 +52,7 @@ const Navbar = () => {
           Contact
         </Link>
 
-        {authUser && <button onClick={handleSellerDashboard} className="text-xs border px-4 py-1.5 rounded-full">Seller Dashboard</button>}
+        {isSeller && <button onClick={() => router.push('/seller')} className="text-xs border px-4 py-1.5 rounded-full">Seller Dashboard</button>}
 
       </div>
 

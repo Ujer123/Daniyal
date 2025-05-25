@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect } from "react";
-import ProductCard from "./ProductCard";
+import ProductCard from "../ProductCard";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "@/lib/features/products/productSlice";

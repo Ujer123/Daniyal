@@ -4,7 +4,7 @@ import Image from "next/image";
 const products = [
   {
     id: 1,
-    image: assets.girl_with_headphone_image,
+    image: assets.ombre,
     title: "Unparalleled Sound",
     description: "Experience crystal-clear audio with premium headphones.",
   },
@@ -36,7 +36,7 @@ const FeaturedProduct = () => {
             <Image
               src={image}
               alt={title}
-              className="group-hover:brightness-75 transition duration-300 w-full h-auto object-cover"
+              className="group-hover:brightness-75 transition duration-300 w-full h-full object-cover"
             />
             <div className="group-hover:-translate-y-4 transition duration-300 absolute bottom-8 left-8 text-white space-y-2">
               <p className="font-medium text-xl lg:text-2xl">{title}</p>

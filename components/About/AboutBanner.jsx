@@ -1,38 +1,87 @@
 import React from "react";
 import { assets } from "@/assets/assets";
 import Image from "next/image";
+import Link from "next/link";
+import { FaHouseChimney } from "react-icons/fa6";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
 
 const Banner = () => {
+  
   return (
-    <div className="flex flex-col md:flex-row items-center justify-between md:pl-20 py-14 md:py-0 my-16 rounded-xl overflow-hidden">
-      <Image
-        className="max-w-56"
-        src={assets.home3}
-        alt="jbl_soundbox_image"
-      />
-      <div className="flex flex-col items-center justify-center text-center space-y-2 px-4 md:px-0">
-        <h2 className="text-2xl md:text-3xl font-semibold max-w-[290px]">
-          Level Up Your Gaming Experience
-        </h2>
-        <p className="max-w-[343px] font-medium text-gray-800/60">
-          From immersive sound to precise controls—everything you need to win
-        </p>
-        <button className="group flex items-center justify-center gap-1 px-12 py-2.5 bg-orange-600 rounded text-white">
-          Buy now
-          <Image className="group-hover:translate-x-1 transition" src={assets.arrow_icon_white} alt="arrow_icon_white" />
-        </button>
+    <>
+    <section className="relative h-96 w-full">
+        <Image
+          src={assets.perfumesbanner}
+          alt="About Banner"
+          fill
+          className="object-cover object-center"
+          priority
+        />
+        <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
+          <h1 className="text-4xl md:text-5xl text-white text-center">
+            About Daniyal Perfumes
+             <Breadcrumb>
+      <BreadcrumbList className="text-white place-self-center mt-4">
+        <BreadcrumbItem>
+          <BreadcrumbLink asChild>
+            <Link href="/" className="flex gap-2"><FaHouseChimney className="mt-0.5"/>Home</Link>
+          </BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbPage className='text-white'>Breadcrumb</BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
+          </h1>
+        </div>
+      </section>
+      <div className="bg-gray-300 flex justify-around py-3">
+        <Image
+          src={assets.paraben}
+          alt="About Banner"
+          className="max-w-full h-auto"
+          priority
+        />
+        <Image
+          src={assets.silicon}
+          alt="About Banner"
+          className="max-w-full h-auto"
+          priority
+        />
+        <Image
+          src={assets.non}
+          alt="About Banner"
+          className="max-w-full h-auto"
+          priority
+        />
+        <Image
+          src={assets.cruelty}
+          alt="About Banner"
+          className="max-w-full h-auto"
+          priority
+        />
+        <Image
+          src={assets.sulphate}
+          alt="About Banner"
+          className="max-w-full h-auto"
+          priority
+        />
+        <Image
+          src={assets.natural}
+          alt="About Banner"
+          className="max-w-full h-auto"
+          priority
+        />
       </div>
-      <Image
-        className="hidden md:block max-w-80"
-        src={assets.md_controller_image}
-        alt="md_controller_image"
-      />
-      <Image
-        className="md:hidden"
-        src={assets.sm_controller_image}
-        alt="sm_controller_image"
-      />
-    </div>
+    </>
   );
 };
 
