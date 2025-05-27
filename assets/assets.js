@@ -1,5 +1,6 @@
 import logo from "./logo.svg";
 import Logo from "./Logo.jpg";
+import LogoRemove from './Logo-remove-bg(1).png';
 import home1 from "./ispahan.png";
 import home2 from "./tam-dao-copy.png";
 import home3 from "./ombre-copy.png";
@@ -47,6 +48,7 @@ import natural from './natural.png'
 
 export const assets = {
   logo,
+  LogoRemove,
   paraben,
   silicon,
   non,

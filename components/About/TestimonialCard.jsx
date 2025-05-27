@@ -70,8 +70,8 @@ export function TestimonialCard() {
               <div className="p-1">
                 <Card>
                   <CardContent className="aspect-auto text-left p-6 bg-[#DEFCFF]">
-                    <h3 className="text-lg font-semibold">{t.name}</h3>
-                    <div className="flex gap-2 mt-1">
+                    <h3 className="text-base font-semibold">{t.name}</h3>
+                    <div className="flex gap-2 my-1">
                       <p className="text-xs">{4.5}</p>
                       <div className="flex gap-0.5">
                         {Array.from({ length: 5 }).map((_, index) => (
@@ -88,7 +88,7 @@ export function TestimonialCard() {
                         ))}
                       </div>
                     </div>
-                    <p>
+                    <p className="text-sm">
                       {expand === index ? t.text : getPreviewText(t.text)}{" "}
                        {t.text.split(" ").length > 25 && (
                         <button
