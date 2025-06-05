@@ -56,7 +56,7 @@ const Services = () => {
   },
 ];
   return (
-    <section className="relative flex flex-col justify-between h-full max-w-6xl px-10 mx-auto xl:px-0 mt-16">
+    <section className="relative flex flex-col justify-between h-full max-w-6xl px-10 mx-auto xl:px-0 mt-16 container">
       <div className="w-fit mx-auto">
         <h2 className="text-3xl md:text-4xl text-center font-bold text-gray-900">
           Our <span className="text-orange-600 font-bold">Services</span>

@@ -19,8 +19,8 @@ const Home = () => {
         {/* <FeaturedProduct /> */}
         <Banner />
         <TestimonialCard/>
-        {/* <NewsLetter /> */}
       </div>
+        <NewsLetter />
     </>
   );
 };

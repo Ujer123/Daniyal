@@ -5,7 +5,7 @@ import { FaLocationDot, FaUserLock } from "react-icons/fa6";
 import { LuSend } from "react-icons/lu";
 
 const ContactInfo = () => (
-    <div className="bg-[#011c2b] rounded-lg p-6 h-full">
+    <div className="bg-gray-900 rounded-lg p-6 h-full">
         <h2 className="text-xl text-white">Contact Information</h2>
         <p className="text-sm text-gray-300 mt-4">
             If you have any questions, simply use the following contact details. For Manufacturing and Export-related inquiries:
@@ -105,13 +105,15 @@ const ContactUs = () => {
             </div>
 
             <div className="max-w-5xl mx-auto bg-white my-10 font-[sans-serif]">
-                <div className="text-center px-6">
-                <div className="flex flex-col items-center">
-        <p className="text-3xl font-medium">Get in Touch</p>
-        <div className="w-28 h-0.5 bg-orange-600 mt-2"></div>
+                <div className="w-fit mx-auto">
+        <h2 className="text-3xl md:text-4xl text-center font-bold text-gray-900">
+          Contact <span className="text-orange-600 font-bold">Us</span>
+        </h2>
+        <div className="border-b-2 border-orange-600 w-[80%] mx-auto my-4"></div>
       </div>
-                    <p className="text-sm text-gray-500 mt-4">Please don&apos;t hesitate to contact us with any inquiries or messages</p>
-                </div>
+      <p className="text-lg text-center text-gray-600 dark:text-gray-800 mb-12 max-w-2xl mx-auto">
+        Please don&apos;t hesitate to contact us with any inquiries or messages
+      </p>
                 <div className="grid lg:grid-cols-3 gap-4 p-2 shadow-lg rounded-lg mt-12">
                     <ContactInfo />
                     <ContactForm />

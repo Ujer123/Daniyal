@@ -45,10 +45,12 @@ import non from './non.png'
 import cruelty from './cruelty.png'
 import sulphate from './sulphate.png'
 import natural from './natural.png'
+import bottomBg from './bottom-bg.jpg'
 
 export const assets = {
   logo,
   LogoRemove,
+  bottomBg,
   paraben,
   silicon,
   non,

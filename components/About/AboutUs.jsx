@@ -17,19 +17,10 @@ const AboutUs = () => {
               <div className="border-b-2 border-orange-600 w-32 mt-4" />
             </div>
             <p className="text-gray-700 text-base leading-relaxed mb-6">
-              <strong>Daniyal Clothing Company</strong>, with its establishment in the <strong>year 2005</strong>,
-              is earning huge accolades in the market for dealing in Fashion Jeans. With diligent efforts
-              of <strong>Founder, Mr. Rashid Malik </strong>, the company is excellently
-              catered to the needs of Fashion Jeans Lovers. The array includes Designer jeans in various fits
-              like Skinny Jeans, Bootcut Jeans, Slim Jeans, Stretch Jeans, Straight Jeans, High Waisted Jeans,
-              Ripped Jeans, Low Rise Jeans, and many more.
+              Welcome to <strong>Daniyal Perfume</strong>, where we believe that a fragrance is more than just a scent—it's a statement of individuality and an extension of your personality. Founded with a passion for creating exceptional fragrances,<strong> Daniyal Perfume</strong> aims to offer a collection that resonates with diverse preferences and lifestyles. At Daniyal, we understand the profound connection between scent and emotion. Each fragrance in our collection is meticulously crafted, inspired by the beauty of nature and the vibrancy of life. Our perfumes encapsulate unique stories and experiences, inviting you to embark on a sensory journey every time you wear them.
             </p>
             <p className="text-gray-700 text-base leading-relaxed mb-6">
-              <strong>Infrastructure:</strong> Our state-of-the-art infrastructure is one of the vital
-              elements of our staggering success. The production unit in Delhi, Quality control unit,
-              packaging unit, warehousing facility, strong network, etc., all comprise our robust
-              infrastructure. This has helped in quality and quantity production of the Denim Jeans that
-              are a perfect match to the international standards.
+              Thank you for choosing Daniyal Perfume. We look forward to sharing our passion with you!
             </p>
             <Link href='/about' className="mt-6 bg-orange-600 text-white px-6 py-2 rounded-full hover:bg-orange-700 transition-colors">
               More About Us →
