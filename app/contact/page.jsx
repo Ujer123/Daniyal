@@ -3,6 +3,7 @@ import { CiMail } from "react-icons/ci";
 import { FaPhoneAlt, FaFacebook, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 import { FaLocationDot, FaUserLock } from "react-icons/fa6";
 import { LuSend } from "react-icons/lu";
+import ContactBanner from "@/components/Contact/ContactBanner";
 
 const ContactInfo = () => (
     <div className="bg-gray-900 rounded-lg p-6 h-full">
@@ -100,20 +101,12 @@ const RadioOption = ({ id, label, defaultChecked = false }) => (
 const ContactUs = () => {
     return (
         <>
+        <ContactBanner/>
             <div className="w-full h-fit">
                 {/* <Image width={1920} height={100} src={ContactBanner} alt="Contact Banner" className="w-full h-[25em]" /> */}
             </div>
 
-            <div className="max-w-5xl mx-auto bg-white my-10 font-[sans-serif]">
-                <div className="w-fit mx-auto">
-        <h2 className="text-3xl md:text-4xl text-center font-bold text-gray-900">
-          Contact <span className="text-orange-600 font-bold">Us</span>
-        </h2>
-        <div className="border-b-2 border-orange-600 w-[80%] mx-auto my-4"></div>
-      </div>
-      <p className="text-lg text-center text-gray-600 dark:text-gray-800 mb-12 max-w-2xl mx-auto">
-        Please don&apos;t hesitate to contact us with any inquiries or messages
-      </p>
+            <div className="max-w-5xl mx-auto bg-white my-10 font-[sans-serif]">          
                 <div className="grid lg:grid-cols-3 gap-4 p-2 shadow-lg rounded-lg mt-12">
                     <ContactInfo />
                     <ContactForm />

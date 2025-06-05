@@ -46,9 +46,13 @@ import cruelty from './cruelty.png'
 import sulphate from './sulphate.png'
 import natural from './natural.png'
 import bottomBg from './bottom-bg.jpg'
+import about_1 from './about-sec-1.webp'
+import about_2 from './about-sec-2.webp'
 
 export const assets = {
   logo,
+  about_1,
+  about_2,
   LogoRemove,
   bottomBg,
   paraben,

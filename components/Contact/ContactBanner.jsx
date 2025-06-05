@@ -26,7 +26,7 @@ const Banner = () => {
         />
         <div className="absolute inset-0 bg-black/70 flex items-center justify-center">
           <h1 className="text-4xl md:text-5xl text-white text-center">
-            About Daniyal Perfumes
+            Contact Us
              <Breadcrumb>
       <BreadcrumbList className="text-white place-self-center mt-4">
         <BreadcrumbItem>
@@ -36,51 +36,13 @@ const Banner = () => {
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         <BreadcrumbItem>
-          <BreadcrumbPage className='text-white'>About Us</BreadcrumbPage>
+          <BreadcrumbPage className='text-white'>Contact</BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
           </h1>
         </div>
       </section>
-      <div className="bg-gray-300 flex justify-around py-3">
-        <Image
-          src={assets.paraben}
-          alt="About Banner"
-          className="max-w-full h-auto"
-          priority
-        />
-        <Image
-          src={assets.silicon}
-          alt="About Banner"
-          className="max-w-full h-auto"
-          priority
-        />
-        <Image
-          src={assets.non}
-          alt="About Banner"
-          className="max-w-full h-auto"
-          priority
-        />
-        <Image
-          src={assets.cruelty}
-          alt="About Banner"
-          className="max-w-full h-auto"
-          priority
-        />
-        <Image
-          src={assets.sulphate}
-          alt="About Banner"
-          className="max-w-full h-auto"
-          priority
-        />
-        <Image
-          src={assets.natural}
-          alt="About Banner"
-          className="max-w-full h-auto"
-          priority
-        />
-      </div>
     </>
   );
 };
