@@ -4,17 +4,18 @@ import Link from "next/link"
 import { useAppContext } from "@/context/AppContext";
 import Image from "next/image";
 import { FaCartFlatbed } from "react-icons/fa6";
-import { useClerk, UserButton, useUser } from "@clerk/nextjs";
+import { useClerk, UserButton, useUser, useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { fetchProductData } from "@/lib/features/user/userSlice";
+import { fetchUserData } from "@/lib/features/user/userSlice";
 
 const Navbar = () => {
   const router = useRouter()
   const dispatch = useDispatch()
   const cartItems = useSelector((state)=> state.cart)
   const {user}  = useUser();
+  const { getToken } = useAuth();
   const { isSeller, userData, loading, error } = useSelector((state) => state.user);
 
 
@@ -25,7 +26,7 @@ const Navbar = () => {
 
   useEffect(() => {
     if (user) {
-      dispatch(fetchProductData(user));
+      dispatch(fetchUserData({ user, getToken }));
     }
   }, [dispatch, user]);
 
