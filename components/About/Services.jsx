@@ -73,7 +73,7 @@ const Services = () => {
         ))}
       </div>
 
-      <div className="w-full grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 py-16">
+      <div className="w-full grid grid-cols-1 gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:py-16 py-6">
         {services.slice(2).map((service, index) => (
           <ServiceCard key={index} {...service} />
         ))}

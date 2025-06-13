@@ -4,7 +4,7 @@ import Image from "next/image";
 const NewsLetter = () => {
   return (
     <>
-    <section className="relative h-72 w-full">
+    <section className="relative lg:h-72 h-80 w-full">
       <Image
                 src={assets.bottomBg}
                 alt="About Banner"
