@@ -2,13 +2,16 @@
 import React from 'react'
 import { assets } from '@/assets/assets'
 import Image from 'next/image';
-import { useAppContext } from '@/context/AppContext';
+// import { useAppContext } from '@/context/AppContext';
+import { useRouter } from 'next/navigation';
 
 
 const ProductCard = ({ product }) => {
+    const router = useRouter();
+    const currency = process.env.NEXT_PUBLIC_CURRENCY || '$';
     
 
-    const { currency, router} = useAppContext()
+    // const { currency, router} = useAppContext()
 
     return (
         <div
