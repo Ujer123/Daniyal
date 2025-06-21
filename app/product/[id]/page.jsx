@@ -1,65 +1,39 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState} from "react";
 import { assets } from "@/assets/assets";
-import ProductCard from "@/components/ProductCard";
 import Image from "next/image";
-import { useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart } from "@/lib/features/cart/cartSlice";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import { fetchProductById } from "@/lib/features/productDetail/productDetailSlice";
-import { fetchProducts } from "@/lib/features/products/productSlice";
+import HomeProducts from "@/components/Home/HomeProducts";
 
 const Product = () => {
   const { id } = useParams();
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const productDetailState = useSelector((state) => state.productDetail);
-  const { product, loading: detailLoading, error: detailError } = productDetailState;
-
-  // Get products list from products slice
-  const productsState = useSelector((state) => state.products);
-  const { products: productList, loading: listLoading, error: listError } = productsState;
+    const { product, loading: detailLoading, error: detailError } = useSelector(
+    (state) => state.productDetail
+  );
   
   const [mainImage, setMainImage] = useState(assets.placeholder);
 
-  // Fetch product when ID changes
   useEffect(() => {
-    if (id) {
-      dispatch(fetchProductById(id));
-    }
+    id && dispatch(fetchProductById(id));
   }, [id, dispatch]);
 
-  // Fetch products if not already loaded
   useEffect(() => {
-    if (Array.isArray(productList) && productList.length === 0) {
-      dispatch(fetchProducts());
-    }
-  }, [dispatch, productList]);
-
-  useEffect(() => {
-    if (product && 
-        Array.isArray(product.image) && 
-        product.image.length > 0 && 
-        product.image[0]) {
-      setMainImage(product.image[0]);
-    }
+    product && setMainImage(product.image[0]);
   }, [product]);
 
-  // Handle loading and error states
-  if (detailLoading) return <div>Loading...</div>;
+  if (detailLoading) return <div className="bg-gray-100 animate-pulse rounded-lg aspect-square" />
   if (detailError) return <div>Error: {detailError}</div>;
   if (!product) return <div>Product not found</div>;
-  
-  // Filter out invalid images with proper array check
-  const validImages = (Array.isArray(product.image) 
-    ? product.image.filter(img => img && typeof img === 'string' && img.trim() !== "") 
-    : []);
 
   return (
     <>
-      <div className="px-6 md:px-16 lg:px-32 pt-14 space-y-10">
+      <div className="px-6 md:px-16 lg:px-32 py-14 space-y-10">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
           <div className="px-5 lg:px-16 xl:px-20">
             <div className="rounded-lg overflow-hidden bg-gray-500/10 mb-4">
@@ -68,12 +42,9 @@ const Product = () => {
     src={mainImage || assets.placeholder}
     alt="Product image"
     className="w-full h-auto object-cover mix-blend-multiply"
-    width={1280}
-    height={720}
+    width={600}
+    height={400}
     priority
-    onError={(e) => {
-      e.target.src = assets.placeholder; // Fallback on error
-    }}
   />
 ) : (
   <div className="w-full bg-gray-100 aspect-video flex items-center justify-center">
@@ -83,7 +54,7 @@ const Product = () => {
             </div>
 
             <div className="grid grid-cols-4 gap-4">
-              {validImages.map((image, index) => (
+              {product.image.map((image, index) => (
                 <div
                   key={index}
                   onClick={() => setMainImage(image || assets.placeholder)}
@@ -91,10 +62,10 @@ const Product = () => {
                 >
                   <Image
                     src={image || assets.placeholder}
-                    alt="alt"
+                    alt={product.name}
                     className="w-full h-auto object-cover mix-blend-multiply"
-                    width={1280}
-                    height={720}
+                    width={600}
+                    height={400}
                   />
                 </div>
               ))}
@@ -107,31 +78,15 @@ const Product = () => {
             </h1>
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-0.5">
-                <Image
+                {[...Array(5)].map((_,index)=>(
+<Image
+key={index}
                   className="h-4 w-4"
-                  src={assets.star_icon}
-                  alt="star_icon"
-                />
-                <Image
-                  className="h-4 w-4"
-                  src={assets.star_icon}
-                  alt="star_icon"
-                />
-                <Image
-                  className="h-4 w-4"
-                  src={assets.star_icon}
-                  alt="star_icon"
-                />
-                <Image
-                  className="h-4 w-4"
-                  src={assets.star_icon}
-                  alt="star_icon"
-                />
-                <Image
-                  className="h-4 w-4"
-                  src={assets.star_dull_icon}
-                  alt="star_dull_icon"
-                />
+                  src={ index < 4 ? assets.star_icon : assets.star_dull_icon}
+                  alt={index < 4 ? "Filled star" : "Empty star"}
+                  />
+                  )
+                )}
               </div>
               <p>(4.5)</p>
             </div>
@@ -182,23 +137,7 @@ const Product = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col items-center">
-          <div className="flex flex-col items-center mb-4 mt-16">
-            <p className="text-3xl font-medium">
-              Featured{" "}
-              <span className="font-medium text-orange-600">Products</span>
-            </p>
-            <div className="w-28 h-0.5 bg-orange-600 mt-2"></div>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 mt-6 pb-14 w-full">
-            {productList.slice(0, 5).map((product, index) => (
-              <ProductCard key={index} product={product} />
-            ))}
-          </div>
-          <button className="px-8 py-2 mb-16 bg-orange-600 rounded-full  text-white">
-            See more
-          </button>
-        </div>
+        <HomeProducts />
       </div>{" "}
     </>
   ) 

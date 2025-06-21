@@ -2,7 +2,7 @@ import Product from "@/models/Product";
 import dbConnect from "@/config/db";
 
 export async function GET(request, { params }) {
-  const { id } = params;
+  const { id } = await params;
   
   try {
     await dbConnect();
