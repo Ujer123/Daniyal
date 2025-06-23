@@ -3,15 +3,20 @@ import { useEffect, useState} from "react";
 import { assets } from "@/assets/assets";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart } from "@/lib/features/cart/cartSlice";
+// import { addToCart } from "@/lib/features/cart/cartSlice";
 import { useRouter, useParams } from "next/navigation";
 import { fetchProductById } from "@/lib/features/productDetail/productDetailSlice";
 import HomeProducts from "@/components/Home/HomeProducts";
+import { addtoCart } from "@/lib/features/user/userSlice";
+import { useAppContext } from "@/context/AppContext";
 
 const Product = () => {
   const { id } = useParams();
   const router = useRouter();
   const dispatch = useDispatch();
+  const {user, getToken}= useAppContext()
+  
+  
 
     const { product, loading: detailLoading, error: detailError } = useSelector(
     (state) => state.productDetail
@@ -30,6 +35,12 @@ const Product = () => {
   if (detailLoading) return <div className="bg-gray-100 animate-pulse rounded-lg aspect-square" />
   if (detailError) return <div>Error: {detailError}</div>;
   if (!product) return <div>Product not found</div>;
+
+  const handleAddToCart = ()=>{
+    if(user){
+      dispatch(addtoCart({user, getToken, productId: id}))
+    }
+  }
 
   return (
     <>
@@ -119,7 +130,7 @@ key={index}
 
             <div className="flex items-center mt-10 gap-4">
               <button
-                  onClick={() => dispatch(addToCart(product._id))}
+                  onClick={handleAddToCart}
                   className="w-full py-3.5 bg-gray-100 text-gray-800/80 hover:bg-gray-200 transition"
                 >
                   Add to Cart
@@ -127,7 +138,6 @@ key={index}
 
               <button
                 onClick={() => {
-                  addToCart(product._id);
                   router.push("/cart");
                 }}
                 className="w-full py-3.5 bg-orange-500 text-white hover:bg-orange-600 transition"

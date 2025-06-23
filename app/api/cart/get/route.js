@@ -3,18 +3,20 @@ import User from "@/models/User";
 import { getAuth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
+
+
 export async function GET(request){
     try {
+
         const {userId} = getAuth(request)
 
         await dbConnect()
-        const user = await User.findById( userId)
+        const user = await User.findById(userId)
 
-        if(!user){
-            return NextResponse.json({success: false, message: 'User Not Found'})
-        }
+        const {cartsData} = user
 
-        return NextResponse.json({success: true, user})
+        return NextResponse.json({success: true, cartsData})
+        
     } catch (error) {
         return NextResponse.json({success: false, message: error.message})
     }

@@ -11,8 +11,8 @@ import { selectCartCount } from "@/lib/features/cart/cartSelectors";
 
 const Cart = () => {
   const dispatch = useDispatch();
-  const cartItems = useSelector((state)=> state.cart)
-  const products = useSelector((state)=> state.products)
+  const {cartItem}= useSelector(state=> state.user)
+  const {products, loading, error} = useSelector((state)=> state.products)
   const cartCount = useSelector(selectCartCount);  
   const {router } = useAppContext()
 
@@ -45,16 +45,16 @@ const Cart = () => {
                 </tr>
               </thead>
               <tbody>
-                {Object.keys(cartItems).map((itemId) => {
+                {Object.keys(cartItem).map((itemId) => {
                   const product = products.find(product => product._id === itemId);
 
-                  if (!product || cartItems[itemId] <= 0) return null;
+                  if (!product || cartItem[itemId] <= 0) return null;
 
                   return (
                     <tr key={itemId}>
                       <td className="flex items-center gap-4 py-4 md:px-4 px-1">
                         <div>
-                          <div className="rounded-lg overflow-hidden bg-gray-500/10 p-2">
+                          <div className="rounded-lg overflow-hidden bg-gray-500/10">
                             <Image
                               src={product.image[0]}
                               alt={product.name}
@@ -83,14 +83,14 @@ const Cart = () => {
                       <td className="py-4 md:px-4 px-1 text-gray-600">${product.offerPrice}</td>
                       <td className="py-4 md:px-4 px-1">
                         <div className="flex items-center md:gap-2 gap-1">
-                          <button onClick={() => dispatch(updateCartQty({itemId: product._id,quantity: cartItems[itemId] - 1}))}>
+                          <button onClick={() => dispatch(updateCartQty({itemId: product._id,quantity: cartItem[itemId] - 1}))}>
                             <Image
                               src={assets.decrease_arrow}
                               alt="decrease_arrow"
                               className="w-4 h-4"
                             />
                           </button>
-                          <input onChange={e => dispatch(updateCartQty(product._id, Number(e.target.value)))} type="number" value={cartItems[itemId]} className="w-8 border text-center appearance-none"></input>
+                          <input onChange={e => dispatch(updateCartQty(product._id, Number(e.target.value)))} type="number" value={cartItem[itemId]} className="w-8 border text-center appearance-none"></input>
                           <button onClick={() => dispatch(addToCart(product._id))}>
                             <Image
                               src={assets.increase_arrow}
@@ -100,7 +100,7 @@ const Cart = () => {
                           </button>
                         </div>
                       </td>
-                      <td className="py-4 md:px-4 px-1 text-gray-600">${(product.offerPrice * cartItems[itemId]).toFixed(2)}</td>
+                      <td className="py-4 md:px-4 px-1 text-gray-600">${(product.offerPrice * cartItem[itemId]).toFixed(2)}</td>
                     </tr>
                   );
                 })}

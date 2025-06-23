@@ -1,7 +1,6 @@
 "use client"
 import { assets, BagIcon, BoxIcon, CartIcon, HomeIcon} from "@/assets/assets";
 import Link from "next/link"
-import { useAppContext } from "@/context/AppContext";
 import Image from "next/image";
 import { FaCartFlatbed } from "react-icons/fa6";
 import { useClerk, UserButton, useUser, useAuth } from "@clerk/nextjs";
@@ -13,16 +12,15 @@ import { fetchUserData } from "@/lib/features/user/userSlice";
 const Navbar = () => {
   const router = useRouter()
   const dispatch = useDispatch()
-  const cartItems = useSelector((state)=> state.cart)
+  const cartData = useSelector((state)=> state.cart)
   const {user}  = useUser();
   const { getToken } = useAuth();
-  const { isSeller, userData, loading, error } = useSelector((state) => state.user);
+  const { isSeller, userData, loading, error, cartItems } = useSelector((state) => state.user);
 
 
-  // const { isSeller } = useAppContext();
   const {openSignIn} = useClerk()
 
-  const getTotalCartItems =()=> Object.values(cartItems).length
+  const getTotalCartItems =()=> Object.values(cartData).length
 
   useEffect(() => {
     if (user) {

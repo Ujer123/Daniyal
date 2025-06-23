@@ -7,7 +7,7 @@ import { fetchProducts } from "@/lib/features/products/productSlice";
 const AllProducts = () => {
 
     const dispatch = useDispatch();
-    const {products, loading, error} = useSelector((state)=> state.products)
+    const { products, loading, error } = useSelector((state) => state.products);
 
     useEffect(()=>{
         dispatch(fetchProducts())
