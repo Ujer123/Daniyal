@@ -1,6 +1,6 @@
 'use client'
 import { useAppContext } from "@/context/AppContext";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo, useCallback } from "react";
 import { useSelector } from "react-redux";
 import { selectCartCount } from "@/lib/features/cart/cartSelectors";
 import { selectCartTotal } from "@/lib/features/cart/cartSelectors";
@@ -9,15 +9,21 @@ import toast from "react-hot-toast";
 
 const OrderSummary = () => {
 
-  const { currency, router, getCartAmount, getToken, user} = useAppContext()
-  const {cartItem} = useSelector(state=> state.user)
+  const { currency, router, getToken, user} = useAppContext()
   const cartCount = useSelector(selectCartCount);
-  const [selectedAddress, setSelectedAddress] = useState(null);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const totalCount = useSelector(selectCartTotal);
+  const [selectedAddress, setSelectedAddress] = useState(null);
   const [userAddresses, setUserAddresses] = useState([]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const fetchUserAddresses = async () => {
+
+  const {taxAmount, totalAmount}= useMemo(()=>{
+    const tax = Math.floor(totalCount * 0.02);
+    const total = Math.floor(totalCount) + tax;
+    return {taxAmount: tax, totalAmount: total}
+  }, [totalCount])
+
+  const fetchUserAddresses = useCallback( async () => {
     try {
       
       const token = await getToken()
@@ -33,19 +39,19 @@ const OrderSummary = () => {
     } catch (error) {
         toast.error(error.message)              
     }
-  }
+  },[user, getToken])
 
-  const handleAddressSelect = (address) => {
+  const handleAddressSelect = useCallback((address) => {
     setSelectedAddress(address);
     setIsDropdownOpen(false);
-  };
+  }, []);
 
   const createOrder = async () => {
 
   }
 
-  const taxAmount = Math.floor(totalCount * 0.02);
-  const totalAmount = Math.floor(totalCount) + taxAmount;
+  // const taxAmount = Math.floor(totalCount * 0.02);
+  // const totalAmount = Math.floor(totalCount) + taxAmount;
 
   useEffect(() => {
     if(user){

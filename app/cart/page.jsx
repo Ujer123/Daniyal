@@ -1,5 +1,5 @@
 'use client'
-import React from "react";
+import React, {useCallback} from "react";
 import { assets } from "@/assets/assets";
 import OrderSummary from "@/components/OrderSummary";
 import Image from "next/image";
@@ -7,22 +7,31 @@ import { useAppContext } from "@/context/AppContext";
 import { useSelector, useDispatch } from "react-redux";
 import { updateCartQty } from "@/lib/features/cart/cartSlice";
 import { selectCartCount } from "@/lib/features/cart/cartSelectors";
-import { updateCartOnServer, decreaseCartOnServer } from "@/lib/features/user/userSlice";
+import { updateCartOnServer, decreaseCartOnServer, removeCartOnServer } from "@/lib/features/user/userSlice";
 
 const Cart = () => {
-  const dispatch = useDispatch();
-  const {cartItem}= useSelector(state=> state.user)
-  const {products, loading, error} = useSelector((state)=> state.products)
-  const cartCount = useSelector(selectCartCount);  
   const {router, user, getToken } = useAppContext()
+  const dispatch = useDispatch();
 
-  const handleUpdateProduct =(productId)=>{
+  const {cartItem}= useSelector(state=> state.user)
+  const cartCount = useSelector(selectCartCount);  
+  const {products, loading, error} = useSelector((state)=> state.products)
+
+  const handleUpdateProduct =useCallback((productId)=>{
     dispatch(updateCartOnServer({user, getToken, productId}))
-  }
+  }, [dispatch, user, getToken])
 
-  const handleDecreaseProduct =(productId)=>{
+  const handleDecreaseProduct = useCallback((productId)=>{
     dispatch(decreaseCartOnServer({user, getToken, productId}))
-  }
+  },[dispatch, user, getToken])
+
+  const handleRemoveProduct = useCallback((productId)=>{
+    dispatch(removeCartOnServer({user, getToken, productId}))
+  }, [dispatch, user, getToken])
+
+  const handleContinueShopping = useCallback(()=>{
+    router.push('/all-products');
+  }, [router])
 
   
 
@@ -69,13 +78,13 @@ const Cart = () => {
                               src={product.image[0]}
                               alt={product.name}
                               className="w-16 h-auto object-cover mix-blend-multiply"
-                              width={1280}
-                              height={720}
+                              width={64}
+                              height={64}
                             />
                           </div>
                           <button
                             className="md:hidden text-xs text-orange-600 mt-1"
-                            onClick={() => dispatch(updateCartQty({itemId: product._id,quantity: 0}))}
+                            onClick={() => handleRemoveProduct(product._id)}
                           >
                             Remove
                           </button>
@@ -84,7 +93,7 @@ const Cart = () => {
                           <p className="text-gray-800">{product.name}</p>
                           <button
                             className="text-xs text-orange-600 mt-1"
-                            onClick={() => dispatch(updateCartQty({itemId: product._id,quantity: 0}))}
+                            onClick={() => handleRemoveProduct(product._id)}
                           >
                             Remove
                           </button>
@@ -100,7 +109,7 @@ const Cart = () => {
                               className="w-4 h-auto"
                             />
                           </button>
-                          <input onChange={e => dispatch(updateCartQty(product._id, Number(e.target.value)))} type="number" value={cartItem[itemId]} className="w-8 border text-center appearance-none"></input>
+                          <input onChange={e => handleUpdateProduct(product._id, Number(e.target.value))} type="number" value={cartItem[itemId]} className="w-8 border text-center appearance-none"></input>
                           <button onClick={()=> handleUpdateProduct(product._id)}>
                             <Image
                               src={assets.increase_arrow}
@@ -117,7 +126,7 @@ const Cart = () => {
               </tbody>
             </table>
           </div>
-          <button onClick={()=> router.push('/all-products')} className="group flex items-center mt-6 gap-2 text-orange-600">
+          <button onClick={handleContinueShopping} className="group flex items-center mt-6 gap-2 text-orange-600">
             <Image
               className="group-hover:-translate-x-1 transition"
               src={assets.arrow_right_icon_colored}
