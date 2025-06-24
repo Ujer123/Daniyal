@@ -12,15 +12,14 @@ import { fetchUserData } from "@/lib/features/user/userSlice";
 const Navbar = () => {
   const router = useRouter()
   const dispatch = useDispatch()
-  const cartData = useSelector((state)=> state.cart)
   const {user}  = useUser();
   const { getToken } = useAuth();
-  const { isSeller, userData, loading, error, cartItems } = useSelector((state) => state.user);
+  const { isSeller, userData, loading, error, cartItem } = useSelector((state) => state.user);
 
 
   const {openSignIn} = useClerk()
 
-  const getTotalCartItems =()=> Object.values(cartData).length
+  const getTotalCartItems =()=> Object.values(cartItem).length
 
   useEffect(() => {
     if (user) {

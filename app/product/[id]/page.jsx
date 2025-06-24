@@ -15,8 +15,6 @@ const Product = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const {user, getToken}= useAppContext()
-  
-  
 
     const { product, loading: detailLoading, error: detailError } = useSelector(
     (state) => state.productDetail

@@ -1,20 +1,30 @@
 'use client'
-import React from "react";
+import React, { useEffect } from "react";
 import { assets } from "@/assets/assets";
 import OrderSummary from "@/components/OrderSummary";
 import Image from "next/image";
 import { useAppContext } from "@/context/AppContext";
 import { useSelector, useDispatch } from "react-redux";
-import { addToCart, updateCartQty } from "@/lib/features/cart/cartSlice";
+import { updateCartQty } from "@/lib/features/cart/cartSlice";
 import { selectCartCount } from "@/lib/features/cart/cartSelectors";
-
+import { updateCartOnServer, decreaseCartOnServer } from "@/lib/features/user/userSlice";
 
 const Cart = () => {
   const dispatch = useDispatch();
   const {cartItem}= useSelector(state=> state.user)
   const {products, loading, error} = useSelector((state)=> state.products)
   const cartCount = useSelector(selectCartCount);  
-  const {router } = useAppContext()
+  const {router, user, getToken } = useAppContext()
+
+  const handleUpdateProduct =(productId)=>{
+    dispatch(updateCartOnServer({user, getToken, productId}))
+  }
+
+  const handleDecreaseProduct =(productId)=>{
+    dispatch(decreaseCartOnServer({user, getToken, productId}))
+  }
+
+  
 
   return (
     <>
@@ -83,19 +93,19 @@ const Cart = () => {
                       <td className="py-4 md:px-4 px-1 text-gray-600">${product.offerPrice}</td>
                       <td className="py-4 md:px-4 px-1">
                         <div className="flex items-center md:gap-2 gap-1">
-                          <button onClick={() => dispatch(updateCartQty({itemId: product._id,quantity: cartItem[itemId] - 1}))}>
+                          <button onClick={() => handleDecreaseProduct(product._id)}>
                             <Image
                               src={assets.decrease_arrow}
                               alt="decrease_arrow"
-                              className="w-4 h-4"
+                              className="w-4 h-auto"
                             />
                           </button>
                           <input onChange={e => dispatch(updateCartQty(product._id, Number(e.target.value)))} type="number" value={cartItem[itemId]} className="w-8 border text-center appearance-none"></input>
-                          <button onClick={() => dispatch(addToCart(product._id))}>
+                          <button onClick={()=> handleUpdateProduct(product._id)}>
                             <Image
                               src={assets.increase_arrow}
                               alt="increase_arrow"
-                              className="w-4 h-4"
+                              className="w-4 h-auto"
                             />
                           </button>
                         </div>
