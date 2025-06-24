@@ -3,7 +3,6 @@ import { useEffect, useState} from "react";
 import { assets } from "@/assets/assets";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
-// import { addToCart } from "@/lib/features/cart/cartSlice";
 import { useRouter, useParams } from "next/navigation";
 import { fetchProductById } from "@/lib/features/productDetail/productDetailSlice";
 import HomeProducts from "@/components/Home/HomeProducts";
