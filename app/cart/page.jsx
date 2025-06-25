@@ -5,13 +5,13 @@ import OrderSummary from "@/components/OrderSummary";
 import Image from "next/image";
 import { useAppContext } from "@/context/AppContext";
 import { useSelector, useDispatch } from "react-redux";
-import { updateCartQty } from "@/lib/features/cart/cartSlice";
-import { selectCartCount } from "@/lib/features/cart/cartSelectors";
-import { updateCartOnServer, decreaseCartOnServer, removeCartOnServer } from "@/lib/features/user/userSlice";
+import { selectCartCount, selectCartItemsWithDetails } from "@/lib/features/cart/cartSelectors";
+import { updateCartOnServer, decreaseCartOnServer, removeCartOnServer, updateCartQuantity } from "@/lib/features/user/userSlice";
 
 const Cart = () => {
   const {router, user, getToken } = useAppContext()
   const dispatch = useDispatch();
+  const cartItems = useSelector(selectCartItemsWithDetails);
 
   const {cartItem}= useSelector(state=> state.user)
   const cartCount = useSelector(selectCartCount);  
@@ -27,6 +27,10 @@ const Cart = () => {
 
   const handleRemoveProduct = useCallback((productId)=>{
     dispatch(removeCartOnServer({user, getToken, productId}))
+  }, [dispatch, user, getToken])
+
+  const handleQuantityChange = useCallback((productId, newQuantity)=>{
+    dispatch(updateCartQuantity({user, getToken, productId, newQuantity}))
   }, [dispatch, user, getToken])
 
   const handleContinueShopping = useCallback(()=>{
@@ -64,19 +68,14 @@ const Cart = () => {
                 </tr>
               </thead>
               <tbody>
-                {Object.keys(cartItem).map((itemId) => {
-                  const product = products.find(product => product._id === itemId);
-
-                  if (!product || cartItem[itemId] <= 0) return null;
-
-                  return (
-                    <tr key={itemId}>
+                {cartItems.map((item) => (
+                    <tr key={item.product._id}>
                       <td className="flex items-center gap-4 py-4 md:px-4 px-1">
                         <div>
                           <div className="rounded-lg overflow-hidden bg-gray-500/10">
                             <Image
-                              src={product.image[0]}
-                              alt={product.name}
+                              src={item.product.image[0]}
+                              alt={item.product.name}
                               className="w-16 h-auto object-cover mix-blend-multiply"
                               width={64}
                               height={64}
@@ -84,33 +83,33 @@ const Cart = () => {
                           </div>
                           <button
                             className="md:hidden text-xs text-orange-600 mt-1"
-                            onClick={() => handleRemoveProduct(product._id)}
+                            onClick={() => handleRemoveProduct(item.product._id)}
                           >
                             Remove
                           </button>
                         </div>
                         <div className="text-sm hidden md:block">
-                          <p className="text-gray-800">{product.name}</p>
+                          <p className="text-gray-800">{item.product.name}</p>
                           <button
                             className="text-xs text-orange-600 mt-1"
-                            onClick={() => handleRemoveProduct(product._id)}
+                            onClick={() => handleRemoveProduct(item.product._id)}
                           >
                             Remove
                           </button>
                         </div>
                       </td>
-                      <td className="py-4 md:px-4 px-1 text-gray-600">${product.offerPrice}</td>
+                      <td className="py-4 md:px-4 px-1 text-gray-600">${item.product.offerPrice}</td>
                       <td className="py-4 md:px-4 px-1">
                         <div className="flex items-center md:gap-2 gap-1">
-                          <button onClick={() => handleDecreaseProduct(product._id)}>
+                          <button onClick={() => handleDecreaseProduct(item.product._id)}>
                             <Image
                               src={assets.decrease_arrow}
                               alt="decrease_arrow"
                               className="w-4 h-auto"
                             />
                           </button>
-                          <input onChange={e => handleUpdateProduct(product._id, Number(e.target.value))} type="number" value={cartItem[itemId]} className="w-8 border text-center appearance-none"></input>
-                          <button onClick={()=> handleUpdateProduct(product._id)}>
+                          <input onChange={e => handleQuantityChange(item.product._id, Number(e.target.value))} type="number" value={item.quantity} className="w-8 border text-center appearance-none"></input>
+                          <button onClick={()=> handleUpdateProduct(item.product._id)}>
                             <Image
                               src={assets.increase_arrow}
                               alt="increase_arrow"
@@ -119,10 +118,10 @@ const Cart = () => {
                           </button>
                         </div>
                       </td>
-                      <td className="py-4 md:px-4 px-1 text-gray-600">${(product.offerPrice * cartItem[itemId]).toFixed(2)}</td>
+                      <td className="py-4 md:px-4 px-1 text-gray-600">${item.subtotal.toFixed(2)}</td>
                     </tr>
-                  );
-                })}
+                  )
+                )}
               </tbody>
             </table>
           </div>

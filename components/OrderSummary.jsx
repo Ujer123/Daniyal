@@ -1,20 +1,24 @@
 'use client'
 import { useAppContext } from "@/context/AppContext";
 import React, { useEffect, useState, useMemo, useCallback } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectCartCount } from "@/lib/features/cart/cartSelectors";
 import { selectCartTotal } from "@/lib/features/cart/cartSelectors";
+import { setCartItem } from "@/lib/features/user/userSlice";
 import axios from "axios";
 import toast from "react-hot-toast";
+
 
 const OrderSummary = () => {
 
   const { currency, router, getToken, user} = useAppContext()
+  const dispatch = useDispatch()
   const cartCount = useSelector(selectCartCount);
   const totalCount = useSelector(selectCartTotal);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [userAddresses, setUserAddresses] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const {cartItem}= useSelector(state=> state.user)
 
 
   const {taxAmount, totalAmount}= useMemo(()=>{
@@ -47,11 +51,36 @@ const OrderSummary = () => {
   }, []);
 
   const createOrder = async () => {
+    try {
 
+      if(!selectedAddress){
+        return toast.error('Please select an Address')
+      }
+      let cartItemArray = Object.keys(cartItem).map((key)=>({product:key, quantity: cartItem[key]}))
+      cartItemArray = cartItemArray.filter(item => item.quantity > 0)
+      
+      if(cartItemArray.length === 0){
+        return toast.error('Cart is empty')
+      }
+      
+      const token = await getToken()
+      const {data} = await axios.post('/api/order/create', {
+        address: selectedAddress._id,
+        items: cartItemArray
+      }, {
+        headers: {Authorization: `Bearer ${token}`}
+      })
+      if(data.success){
+        toast.success(data.message)
+        dispatch(setCartItem({}))
+        router.push('/order-placed')
+      }else{
+        console.log(data.message)
+      }
+    } catch (error) {
+      console.error(error.message)
+    }
   }
-
-  // const taxAmount = Math.floor(totalCount * 0.02);
-  // const totalAmount = Math.floor(totalCount) + taxAmount;
 
   useEffect(() => {
     if(user){
