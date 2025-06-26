@@ -6,20 +6,22 @@ import { useDispatch, useSelector } from "react-redux";
 import { useRouter, useParams } from "next/navigation";
 import { fetchProductById } from "@/lib/features/productDetail/productDetailSlice";
 import HomeProducts from "@/components/Home/HomeProducts";
-import { addtoCart } from "@/lib/features/user/userSlice";
 import { useAppContext } from "@/context/AppContext";
+import { updateCartOnServer, decreaseCartOnServer, updateCartQuantity, addtoCart } from "@/lib/features/user/userSlice";
 
 const Product = () => {
   const { id } = useParams();
   const router = useRouter();
   const dispatch = useDispatch();
   const {user, getToken}= useAppContext()
+  const {cartItem} = useSelector(state => state.user)
 
     const { product, loading: detailLoading, error: detailError } = useSelector(
     (state) => state.productDetail
   );
   
   const [mainImage, setMainImage] = useState(assets.placeholder);
+  const [inputValue, setInputValue] = useState("")
 
   useEffect(() => {
     id && dispatch(fetchProductById(id));
@@ -28,6 +30,14 @@ const Product = () => {
   useEffect(() => {
     product && setMainImage(product.image[0]);
   }, [product]);
+
+  useEffect(()=>{
+    if(cartItem && cartItem[id]){
+      setInputValue(cartItem[id].toString());
+    }else{
+      setInputValue("")
+    }
+  }, [cartItem, id])
 
   if (detailLoading) return <div className="bg-gray-100 animate-pulse rounded-lg aspect-square" />
   if (detailError) return <div>Error: {detailError}</div>;
@@ -38,6 +48,21 @@ const Product = () => {
       dispatch(addtoCart({user, getToken, productId: id}))
     }
   }
+
+  const handleUpdateProduct =(productId)=>{
+      dispatch(updateCartOnServer({user, getToken, productId}))
+    }
+  
+    const handleDecreaseProduct = (productId)=>{
+      dispatch(decreaseCartOnServer({user, getToken, productId}))
+    }
+  
+    const handleQuantityChange = (productId, newQuantity)=>{
+      dispatch(updateCartQuantity({user, getToken, productId, newQuantity}))
+    }
+
+    const isInCart = cartItem && cartItem[id] > 0
+
 
   return (
     <>
@@ -124,12 +149,60 @@ key={index}
                 </tbody>
               </table>
             </div>
-
+            {isInCart ?
+<div className="flex items-center mt-10 gap-4">
+            <div className="flex items-center md:gap-2 gap-1">
+                                      <button onClick={() => handleDecreaseProduct(product._id)}>
+                                        <Image
+                                          src={assets.decrease_arrow}
+                                          alt="decrease_arrow"
+                                          className="w-4 h-auto"
+                                        />
+                                      </button>
+                                       <input 
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      // Allow empty string temporarily while typing
+                      if (value === "") {
+                        setInputValue("");
+                        return;
+                      }
+                      
+                      const numValue = parseInt(value, 10);
+                      if (!isNaN(numValue)) {
+                        setInputValue(numValue.toString());
+                        handleQuantityChange(numValue);
+                      }
+                    }}
+                    type="number"
+                    min="0"
+                    value={inputValue}
+                    className="w-12 border-0 text-center bg-transparent appearance-none focus:outline-none"
+                  />
+                                      <button onClick={()=> handleUpdateProduct(product._id)}>
+                                        <Image
+                                          src={assets.increase_arrow}
+                                          alt="increase_arrow"
+                                          className="w-4 h-auto"
+                                        />
+                                      </button>
+                                      
+                                    </div>
+            <button
+                onClick={() => {
+                  router.push("/cart");
+                }}
+                className="w-full py-3.5 bg-orange-500 text-white hover:bg-orange-600 transition"
+                >
+                Buy now
+              </button>
+            </div>
+            : 
             <div className="flex items-center mt-10 gap-4">
               <button
                   onClick={handleAddToCart}
                   className="w-full py-3.5 bg-gray-100 text-gray-800/80 hover:bg-gray-200 transition"
-                >
+                  >
                   Add to Cart
                 </button>
 
@@ -138,10 +211,12 @@ key={index}
                   router.push("/cart");
                 }}
                 className="w-full py-3.5 bg-orange-500 text-white hover:bg-orange-600 transition"
-              >
+                >
                 Buy now
               </button>
             </div>
+            
+              }
           </div>
         </div>
         <HomeProducts />

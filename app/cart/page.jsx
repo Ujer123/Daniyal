@@ -13,9 +13,7 @@ const Cart = () => {
   const dispatch = useDispatch();
   const cartItems = useSelector(selectCartItemsWithDetails);
 
-  const {cartItem}= useSelector(state=> state.user)
   const cartCount = useSelector(selectCartCount);  
-  const {products, loading, error} = useSelector((state)=> state.products)
 
   const handleUpdateProduct =useCallback((productId)=>{
     dispatch(updateCartOnServer({user, getToken, productId}))
@@ -37,7 +35,6 @@ const Cart = () => {
     router.push('/all-products');
   }, [router])
 
-  
 
   return (
     <>
